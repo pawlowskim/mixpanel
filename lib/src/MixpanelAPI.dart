@@ -89,7 +89,12 @@ class MixpanelAPI {
   void identify(String distinctId) {
     _channel.invokeMethod<void>('identify');
   }
-
+  
+  Future<void> identifyWithData(String distinctId, [Map<String, dynamic> properties]) {
+    return _channel.invokeMethod<void>('identifyWithData',
+        <String, dynamic>{'distinctId': distinctId, 'properties': properties});
+  }
+  
   ///
   /// Use this method to opt-in an already opted-out user from tracking.
   ///

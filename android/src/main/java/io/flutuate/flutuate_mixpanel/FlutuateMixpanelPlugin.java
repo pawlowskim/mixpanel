@@ -96,6 +96,9 @@ implements FlutterPlugin, MethodCallHandler
             case "identify":
                 identify(call, result);
                 break;
+            case "identifyWithData":
+                identifyWithData(call, result);
+                break;
             default:
                 result.notImplemented();
                 break;
@@ -138,6 +141,18 @@ implements FlutterPlugin, MethodCallHandler
         result.success(null);
     }
 
+    private void identifyWithData(MethodCall call, Result result) {
+        String distinctId = call.argument("distinctId");
+        Map<String, Object> mapProperties = call.<HashMap<String, Object>>argument("properties");
+		mixpanel.identify(distinctId);
+		mixpanel.getPeople().identify(distinctId);
+		for (String key : mapProperties.keySet()) {
+			mixpanel.getPeople().set(key, mapProperties.get(key));
+		}
+
+        result.success(null);
+    }
+	
     private void trackMap(MethodCall call, Result result) {
         String eventName = call.argument("eventName");
         Map<String, Object> properties = call.<HashMap<String, Object>>argument("properties");

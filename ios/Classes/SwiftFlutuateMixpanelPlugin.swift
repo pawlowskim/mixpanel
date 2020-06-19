@@ -43,6 +43,9 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
 		case "identify":
 			self.identify(call: call, result: result)
 			break
+		case "identifyWithData":
+			self.identifyWithData(call: call, result: result)
+			break
 		default:
 			result(FlutterMethodNotImplemented)
 	}
@@ -111,4 +114,14 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
     let distinctId = (arguments?["distinctId"] as? String)!
     Mixpanel.mainInstance().identify(distinctId: distinctId);
   }	
+  
+  private void identifyWithData(MethodCall call, Result result) {
+    let arguments = call.arguments as? [String : Any]
+    let distinctId = (arguments?["distinctId"] as? String)!
+    Mixpanel.mainInstance().identify(distinctId: distinctId)
+	Mixpanel.mainInstance().people.identify(distinctId: distinctId)
+	
+    let properties = arguments?["properties"] as? Properties
+	Mixpanel.mainInstance().people.set(properties: properties)
+  }
 }

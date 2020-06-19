@@ -18,15 +18,13 @@ class MyApp extends StatefulWidget {
   MyApp(this._mixpanelToken);
 
   @override
-  _MyAppState createState() => _MyAppState(_mixpanelToken);
+  _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
   MixpanelAPI _mixpanel;
-  String _mixpanelToken;
+  final String _mixpanelToken = "df65669f78a0bbb73368d14fbacb7201";
   String _resultMessage = '';
-
-  _MyAppState(this._mixpanelToken);
 
   @override
   void initState() {
@@ -41,12 +39,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     List<Widget> content;
-    if (_mixpanelToken == null || _mixpanelToken.trim().length == 0) {
-      content = [Text('Your Mixpanel Token was not informed')];
-    }
-    else {
-      content = createButtons(context);
-    }
+    content = createButtons(context);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -73,6 +66,7 @@ class _MyAppState extends State<MyApp> {
   List<Widget> createButtons(BuildContext context) {
     return [
       buttonGetInstance(context),
+      buttonIdentifyWithData(context),
       buttonTrackEvent(context),
       buttonGetDeviceInfo(context),
       buttonGetDistinctId(context),
@@ -80,40 +74,33 @@ class _MyAppState extends State<MyApp> {
     ];
   }
 
-  Widget buttonGetInstance(BuildContext context) =>
-      RaisedButton(
-          key: Key('getInstance'),
-          child: Text('Get an instance of Mixpanel plugin'),
-          onPressed: () => getInstance()
-      );
+  Widget buttonGetInstance(BuildContext context) => RaisedButton(
+      key: Key('getInstance'),
+      child: Text('Get an instance of Mixpanel plugin'),
+      onPressed: () => getInstance());
 
-  Widget buttonTrackEvent(BuildContext context) =>
-    RaisedButton(
+  Widget buttonIdentifyWithData(BuildContext context) => RaisedButton(
+      key: Key('identieyWithData'),
+      child: Text('Identify with data'),
+      onPressed: () => identifyWithData());
+
+  Widget buttonTrackEvent(BuildContext context) => RaisedButton(
       key: Key('trackEvent'),
       child: Text('Track an event'),
-      onPressed: () => trackEvent()
-    );
+      onPressed: () => trackEvent());
 
-  Widget buttonGetDeviceInfo(BuildContext context) =>
-    RaisedButton(
-        key: Key('getDeviceInfo'),
-        child: Text('Get device info'),
-        onPressed: () => getDeviceInfo()
-    );
+  Widget buttonGetDeviceInfo(BuildContext context) => RaisedButton(
+      key: Key('getDeviceInfo'),
+      child: Text('Get device info'),
+      onPressed: () => getDeviceInfo());
 
-  Widget buttonGetDistinctId(BuildContext context) =>
-      RaisedButton(
-          key: Key('getDistinctId'),
-          child: Text('Get distinct id'),
-          onPressed: () => getDistinctId()
-      );
+  Widget buttonGetDistinctId(BuildContext context) => RaisedButton(
+      key: Key('getDistinctId'),
+      child: Text('Get distinct id'),
+      onPressed: () => getDistinctId());
 
-  Widget buttonFlush(BuildContext context) =>
-      RaisedButton(
-          key: Key('flush'),
-          child: Text('Flush'),
-          onPressed: () => flush()
-      );
+  Widget buttonFlush(BuildContext context) => RaisedButton(
+      key: Key('flush'), child: Text('Flush'), onPressed: () => flush());
 
   void getInstance() {
     MixpanelAPI.getInstance(_mixpanelToken).then((mixpanel) {
@@ -124,9 +111,20 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void identifyWithData() {
+    Map<String, String> properties = {
+      "first_name": "Test first name",
+      "last_name": "Test last name"
+    };
+    _mixpanel.identifyWithData('TestDistinctId000000', properties);
+    setState(() {
+      _resultMessage = 'Identified';
+    });
+  }
+
   void trackEvent() {
     Map<String, String> properties = {"Button Pressed": "A button was pressed"};
-    _mixpanel.track('Flutuate.io Mixpanel Plugin Event', properties);
+    _mixpanel.track('Test Event', properties);
     setState(() {
       _resultMessage = 'Event sent with success!';
     });
