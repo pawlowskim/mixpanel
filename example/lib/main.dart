@@ -23,7 +23,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   MixpanelAPI _mixpanel;
-  final String _mixpanelToken = "df65669f78a0bbb73368d14fbacb7201";
+  final String _mixpanelToken = "";
   String _resultMessage = '';
 
   @override
