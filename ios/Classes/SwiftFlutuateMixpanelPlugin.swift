@@ -79,8 +79,13 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
   private func track(call: FlutterMethodCall, result: @escaping FlutterResult) {
     let arguments = call.arguments as? [String:Any]
     let eventName = arguments?["eventName"] as? String
-    let properties = arguments?["properties"] as? Properties
-	Mixpanel.mainInstance().track( event: eventName, properties: properties);
+    if let properties = arguments?["properties"] as? [String: String] {
+        var props: Properties = [:]
+        properties.forEach { (key, value) in
+            props[key] = String(value)
+        }
+        Mixpanel.mainInstance().track(event: eventName, properties: properties)
+    }
   }
   
   private func trackMap(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -115,13 +120,18 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
     Mixpanel.mainInstance().identify(distinctId: distinctId);
   }	
   
-  private void identifyWithData(MethodCall call, Result result) {
+    private func identifyWithData(call: FlutterMethodCall, result: @escaping FlutterResult) {
     let arguments = call.arguments as? [String : Any]
     let distinctId = (arguments?["distinctId"] as? String)!
     Mixpanel.mainInstance().identify(distinctId: distinctId)
-	Mixpanel.mainInstance().people.identify(distinctId: distinctId)
+//	Mixpanel.mainInstance().people.identify(distinctId: distinctId)
 	
-    let properties = arguments?["properties"] as? Properties
-	Mixpanel.mainInstance().people.set(properties: properties)
+        if let properties = arguments?["properties"] as? [String: String] {
+            var props: Properties = [:]
+            properties.forEach { (key, value) in
+                props[key] = String(value)
+            }
+            Mixpanel.mainInstance().people.set(properties: props)
+        }
   }
 }
