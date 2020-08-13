@@ -41,7 +41,7 @@ class MixpanelAPI {
   ///
   /// See native [Mixpanel.flush](http://mixpanel.github.io/mixpanel-android/com/mixpanel/android/mpmetrics/MixpanelAPI.html#flush--)
   /// for more information.
-  Future<void> void flush() {
+  Future<void> flush() {
     return _channel.invokeMethod<void>('flush');
   }
 
@@ -51,7 +51,7 @@ class MixpanelAPI {
   /// See native [Mixpanel.track](http://mixpanel.github.io/mixpanel-android/com/mixpanel/android/mpmetrics/MixpanelAPI.html#track-java.lang.String-org.json.JSONObject-)
   /// and [Mixpanel.trackMap](http://mixpanel.github.io/mixpanel-android/com/mixpanel/android/mpmetrics/MixpanelAPI.html#trackMap-java.lang.String-java.util.Map-)
   /// for more information.
-  Future<void> void track(String eventName, [Map<String, dynamic> properties]) {
+  Future<void> track(String eventName, [Map<String, dynamic> properties]) {
     return _channel.invokeMethod<void>('track',
         <String, dynamic>{'eventName': eventName, 'properties': properties});
   }
