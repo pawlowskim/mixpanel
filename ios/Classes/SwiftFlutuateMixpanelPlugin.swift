@@ -74,6 +74,7 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
   
   private func flush(result: @escaping FlutterResult) {
     Mixpanel.mainInstance().flush()
+    result("success");
   }
   
   private func track(call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -86,10 +87,12 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
         }
         Mixpanel.mainInstance().track(event: eventName, properties: properties)
     }
+    result("success");
   }
   
   private func trackMap(call: FlutterMethodCall, result: @escaping FlutterResult) {
     track(call: call, result: result)
+    result("success");
   }  
   
   private func getDeviceInfo(result: @escaping FlutterResult) {
@@ -104,28 +107,31 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
   
   private func optInTracking(result: @escaping FlutterResult) {
     Mixpanel.mainInstance().optInTracking()
+    result("success");
   }
   
   private func optOutTracking(result: @escaping FlutterResult) {
     Mixpanel.mainInstance().optOutTracking()
+    result("success");
   }
   
   private func reset(result: @escaping FlutterResult) {
     Mixpanel.mainInstance().reset()
+    result("success");
   }
 
   private func identify(call: FlutterMethodCall, result: @escaping FlutterResult) {
     let arguments = call.arguments as? [String : Any]
     let distinctId = (arguments?["distinctId"] as? String)!
     Mixpanel.mainInstance().identify(distinctId: distinctId);
+    result("success");
   }	
   
-    private func identifyWithData(call: FlutterMethodCall, result: @escaping FlutterResult) {
-    let arguments = call.arguments as? [String : Any]
-    let distinctId = (arguments?["distinctId"] as? String)!
-    Mixpanel.mainInstance().identify(distinctId: distinctId)
-//	Mixpanel.mainInstance().people.identify(distinctId: distinctId)
-	
+  private func identifyWithData(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        let arguments = call.arguments as? [String : Any]
+        let distinctId = (arguments?["distinctId"] as? String)!
+        Mixpanel.mainInstance().identify(distinctId: distinctId)
+
         if let properties = arguments?["properties"] as? [String: String] {
             var props: Properties = [:]
             properties.forEach { (key, value) in
@@ -133,5 +139,6 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
             }
             Mixpanel.mainInstance().people.set(properties: props)
         }
+    result("success");
   }
 }
