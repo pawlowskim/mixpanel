@@ -80,13 +80,35 @@ public class SwiftFlutuateMixpanelPlugin: NSObject, FlutterPlugin {
   private func track(call: FlutterMethodCall, result: @escaping FlutterResult) {
     let arguments = call.arguments as? [String:Any]
     let eventName = arguments?["eventName"] as? String
+
     if let properties = arguments?["properties"] as? [String: Any] {
         var props: Properties = [:]
         properties.forEach { (key, value) in
-            props[key] = value
+            if let casted = value as? Bool{
+                props[key] = casted
+            }
+            if let casted = value as? Float{
+                props[key] = casted
+            }
+            if let casted = value as? Double{
+                props[key] = casted
+            }
+            if let casted = value as? UInt{
+                props[key] = casted
+            }
+            if let casted = value as? Int{
+                props[key] = casted
+            }
+            if let casted = value as? String{
+                props[key] = casted
+            }
+            if let casted = value as? NSNumber{
+                props[key] = casted
+            }
         }
-        Mixpanel.mainInstance().track(event: eventName, properties: properties)
+        Mixpanel.mainInstance().track(event: eventName, properties: props)
     }
+
     result("success");
   }
   
